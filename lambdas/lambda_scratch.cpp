@@ -98,9 +98,9 @@ bool containsTitle(const std::vector<Book>& shelf, const std::string& title) {
     // ownership of title to t, which can be more efficient for large objects. However, after the move,
     // the original title variable should not be used, as its state is considered to be valid but unspecified.
 
-    auto hasTitle = [t=std::move(title)](const Book& b) {
-        return b.title == t;
-    };
+    // auto hasTitle = [t=std::move(title)](const Book& b) {
+    //     return b.title == t;
+    // };
 
     // ===== alternative: capture only what is needed by reference: [&] =====
     // This lambda function captures all variables used in its body by reference. This can be convenient
@@ -110,6 +110,15 @@ bool containsTitle(const std::vector<Book>& shelf, const std::string& title) {
     // auto hasTitle = [&] (const Book& b) {
     //     return b.title == title;
     // };
+
+    // ===== alternative: capture only what is needed by value: [=] =====
+    // This lambda function captures all variables used in its body by value. This can be convenient
+    // when the lambda function uses many variables from its enclosing scope, but it can also lead to
+    // unintended side effects if the lambda function modifies these variables.
+
+    auto hasTitle = [=] (const Book& b) {
+        return b.title == title;
+    };
 
 
     return shelf.end() != std::find_if(shelf.begin(), shelf.end(), hasTitle);
