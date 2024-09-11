@@ -1,27 +1,30 @@
 class NumMatrix {
 private:
     vector<vector<int>> prefixSum2d;
+    int result = 0;
     
 public:
     
     NumMatrix(vector<vector<int>>& matrix) {
-        const int ROWS = matrix.size() +1;
-        const int COLS = matrix[0].size() +1;
+        const int ROWS = matrix.size() + 1;
+        const int COLS = matrix[0].size() + 1;
         prefixSum2d = vector<vector<int>>(ROWS, vector<int> (COLS));
-        for (int row = 0; row < ROWS; row++) {
-            for (int column = 0; column<COLS; column++) {
-                prefixSum2d[row + 1][column + 1] = matrix[row][column] + prefixSum2d[row - 1][column] + prefixSum2d[row][column - 1] - prefixSum2d[row - 1][column - 1];
+        for (int row = 0; row < ROWS-1; row++) {
+            for (int column = 0; column<COLS-1; column++) {
+                prefixSum2d[row + 1][column + 1] = matrix[row][column] + prefixSum2d[row + 1][column] + prefixSum2d[row][column + 1] - prefixSum2d[row][column];
             }
-                }
+        }
     }
     
     int sumRegion(int row1, int col1, int row2, int col2) {
         
-        
+        result = prefixSum2d[row2+1][col2+1] - prefixSum2d[row2+1][col1] - prefixSum2d[row1][col2+1] + prefixSum2d[row1][col1];
+
+        return result;
     }
 
-
 };
+
 
 // TODO
 /**
@@ -45,4 +48,4 @@ public:
  
 
 
-// Cursor parking lot <3
+// Cursor parking lot  
